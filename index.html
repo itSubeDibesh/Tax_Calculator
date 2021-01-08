@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tax Analyzer</title>
+
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="./Assets/Vendor/bootstrap/css/bootstrap.min.css">
+
+    <!-- Fontawesom -->
+    <link rel="stylesheet" href="./Assets/Vendor/fontawesom/css/fontawesome.min.css">
+
+    <!-- JS Default Loader -->
+    <script src="./Assets/Vendor/jquery/jquery-3.5.1.min.js" defer></script>
+    <script src="./Assets/Vendor/bootstrap/js/bootstrap.min.js" defer></script>
+    <script src="./Assets/Vendor/fontawesom/js/all.min.js" defer></script>
+
+    <!-- App Scripts Fetch -->
+    <script src="./Assets/scripts/app.js" type="module" defer></script>
+
+    <!-- Preloading Other Scripts -->
+    <link rel="script" href="./Assets/scripts/database/index.js" rel="preload">
+    <link rel="script" href="./Assets/scripts/elements/index.js" rel="preload">
+    <link rel="script" href="./Assets/scripts/entry/calculation/index.js" rel="preload">
+    <link rel="script" href="./Assets/scripts/entry/inputs/index.js" rel="preload">
+    <link rel="script" href="./Assets/scripts/settings/index.js" rel="preload">
+</head>
+
+<body class="bg-dark">
+
+    <!-- Incase of No Script  -->
+    <noscript>
+        <div class="container mt-2">
+            <div class="card bg-danger text-light">
+                <div class="caed-body p-2">
+                    <b>Your Javascript Might be dissabled please enable it.</b>
+                </div>
+            </div>
+        </div>
+    </noscript>
+
+    <!-- Application Actual Body -->
+    <div class="container mt-2">
+        <!-- Alert Message -->
+        <div class="alert alert-success d-none" role="alert" id="APP_ALERT">
+            <i class="fas fa-bullhorn"></i> <b><span id="APP_APERT_MESSAGE"></span></b>
+        </div>
+        <div class="row">
+            <!-- Calculator Settings -->
+            <div class="col-md-12 ml-2 d-none" id="CALCULATOR_SETTINGS">
+                <div class="card">
+                    <div class="card-header">
+                        <b>Calculator Settings</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 pr-2 pl-2">
+                                <label for="STORAGE_RANEG"><b>Profit ranger in %</b></label>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6 p-2">
+                                        <label for="STORAGE_PROFIT_MINIMUM">Minimum %</label>
+                                        <input type="number" name="STORAGE_PROFIT_MINIMUM" id="STORAGE_PROFIT_MINIMUM"
+                                            class="form-control" placeholder="10" value="10" min="0" max="100">
+                                    </div>
+                                    <div class="col-md-6 p-2">
+                                        <label for="STORAGE_PROFIT_MAXIMUM">Maximum %</label>
+                                        <input type="number" name="STORAGE_PROFIT_MAXIMUM" id="STORAGE_PROFIT_MAXIMUM"
+                                            class="form-control" placeholder="20" value="20" min="0" max="100">
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="STORAGE_TAX_PERCENT"><b>Tax %</b></label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="number" name="STORAGE_TAX_PERCENT" id="STORAGE_TAX_PERCENT"
+                                    class="form-control" placeholder="13" value="13" min="0" max="100">
+                            </div>
+                            <div class="col-md-12 m-2 text-center">
+                                <button type="button" id="STORAGE_CALCULATOR_SETTINGS_SAVE"
+                                    class="btn btn-sm btn-primary"><i class="fas fa-save"></i>
+                                    Save</button>
+                                <button type="button" id="STORAGE_CALCULATOR_SETTINGS_CANCEL"
+                                    class="btn btn-sm btn-danger"><i class="fas fa-window-close"></i>
+                                    Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Calculation Body -->
+            <div class="col-md-12 mt-2 ml-1 mb-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6 text-left">
+                                <b> Tax Calculator</b>
+                            </div>
+                            <div class="col-6 text-right">
+                                <button type="button" id="CALCULATOR_SETTINGS_TRIGGER" class="btn btn-sm btn-primary"><i
+                                        class="fas fa-cogs"></i>
+                                    Settings</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Input and Store on tabel -->
+                        <div class="row">
+                            <div class="col-md-6 pl-2 pr-2">
+                                <label for="INPUT_QUANTITY">Quantity</label>
+                                <input type="number" name="INPUT_QUANTITY" id="INPUT_QUANTITY" class="form-control">
+                            </div>
+                            <div class="col-md-6 pl-2 pr-2">
+                                <label for="INPUT_UNIT_PRICE">Unit Price</label>
+                                <input type="number" name="INPUT_UNIT_PRICE" id="INPUT_UNIT_PRICE" class="form-control">
+                            </div>
+                            <div class="col-md-12 ml-4">
+                                <input class="form-check-input" type="checkbox" id="INPUT_RANGE" name="INPUT_RANGE">
+                                <label class="form-check-label" for="INPUT_RANGE">
+                                    Profit Form Range
+                                </label>
+                            </div>
+                            <div class="col-md-12 pl-2 pr-2 pt-2 text-center">
+                                <button type="button" id="INPUT_ADD" class="btn btn-sm btn-primary"><i
+                                        class="fas fa-plus"></i>
+                                    Add</button>
+                                <button type="button" id="INPUT_CANCEL" class="btn btn-sm btn-danger"><i
+                                        class="fas fa-trash"></i>
+                                    Clear</button>
+                                <hr>
+                            </div>
+                        </div>
+                        <!-- Input List for Calculation -->
+                        <div class="row mt-2 d-none" id="INPUT_TABLE">
+                            <div class="col-12 table-responsive">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Input Price</th>
+                                            <th scope="col"><i class="fas fa-calculator"></i> Price</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Profit %</th>
+                                            <th scope="col">Range</th>
+                                            <th scope="col">Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="INPUT_TABLE_ELEMENMTS"></tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <hr>
+                                <button type="button" id="CALCULATE_BILL" class="btn btn-sm btn-success"><i
+                                        class="fas fa-calculator"></i> Calculate</button>
+                                <button type="button" id="CALCULATE_BILL_RESET" class="btn btn-sm btn-danger"><i
+                                        class="fas fa-trash"></i> Reset</button>
+                            </div>
+                        </div>
+                        <div class="row mt-2 d-block" id="CALCULATION_BLOCK">
+                            <div class="col-md-12">
+                                <hr>
+                                <fieldset disabled>
+                                    <div class="form-group row">
+                                        <label for="BILL_TOTAL" class="col-md-4 col-form-label"><b>Total</b></label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control form-control-md" id="BILL_TOTAL">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="BILL_TAXABLE_AMOUNT" class="col-md-4 col-form-label"><b>Taxable
+                                                Amount</b></label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control form-control-md"
+                                                id="BILL_TAXABLE_AMOUNT">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="BILL_VAT_PERCENTAGE" class="col-md-4 col-form-label"><b>VAT
+                                                %</b></label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control form-control-md"
+                                                id="BILL_VAT_PERCENTAGE">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="BILL_GRAND_TOTAL" class="col-md-4 col-form-label"><b>Grand
+                                                Total</b></label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control form-control-md"
+                                                id="BILL_GRAND_TOTAL">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="button" id="BILL_CALCULATOR_CANCEL" class="btn btn-sm btn-danger"><i
+                                        class="fas fa-trash"></i>
+                                    Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
