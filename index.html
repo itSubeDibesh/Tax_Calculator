@@ -2,9 +2,19 @@
 <html lang="en">
 
 <head>
+    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Tax Analyzer</title>
+    <meta name="author" content="Dibesh Raj Subedi">
+    <meta name="description" content="Tax Calculator, Tax Calculation">
+    <meta name="theme-color" content="#3367D6">
+
+    <!-- Application Title -->
+    <title>Tax Calculator</title>
+
+    <!-- Fav iCons -->
+    <link rel="shortcut icon" href="./Favicon/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./Favicon/favicon-512.png">
 
     <!-- Bootstrap  -->
     <link rel="stylesheet" href="./Assets/Vendor/bootstrap/css/bootstrap.min.css">
@@ -23,9 +33,12 @@
     <!-- Preloading Other Scripts -->
     <link rel="script" href="./Assets/scripts/database/index.js" rel="preload">
     <link rel="script" href="./Assets/scripts/elements/index.js" rel="preload">
-    <link rel="script" href="./Assets/scripts/entry/calculation/index.js" rel="preload">
-    <link rel="script" href="./Assets/scripts/entry/inputs/index.js" rel="preload">
+    <link rel="script" href="./Assets/scripts/entry/index.js" rel="preload">
     <link rel="script" href="./Assets/scripts/settings/index.js" rel="preload">
+
+    <!-- Menifestation -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="./manifest.webmanifest" crossorigin="use-credentials">
 </head>
 
 <body class="bg-dark">
@@ -162,7 +175,7 @@
                                         class="fas fa-trash"></i> Reset</button>
                             </div>
                         </div>
-                        <div class="row mt-2 d-block" id="CALCULATION_BLOCK">
+                        <div class="row mt-2 d-none" id="CALCULATION_BLOCK">
                             <div class="col-md-12">
                                 <hr>
                                 <fieldset disabled>
@@ -184,8 +197,16 @@
                                         <label for="BILL_VAT_PERCENTAGE" class="col-md-4 col-form-label"><b>VAT
                                                 %</b></label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control form-control-md"
+                                            <input type="text" class="form-control form-control-md" value="13"
                                                 id="BILL_VAT_PERCENTAGE">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="BILL_VAT_AMOUNT" class="col-md-4 col-form-label"><b>VAT
+                                                Amount</b></label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control form-control-md"
+                                                id="BILL_VAT_AMOUNT">
                                         </div>
                                     </div>
                                     <div class="form-group row">

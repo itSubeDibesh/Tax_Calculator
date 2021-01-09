@@ -65,6 +65,7 @@ const
         BILL_TOTAL: getElementById('BILL_TOTAL'),
         BILL_TAXABLE_AMOUNT: getElementById('BILL_TAXABLE_AMOUNT'),
         BILL_VAT_PERCENTAGE: getElementById('BILL_VAT_PERCENTAGE'),
+        BILL_VAT_AMOUNT: getElementById('BILL_VAT_AMOUNT'),
         BILL_GRAND_TOTAL: getElementById('BILL_GRAND_TOTAL'),
         BILL_CALCULATOR_CANCEL: getElementById('BILL_CALCULATOR_CANCEL'),
     }

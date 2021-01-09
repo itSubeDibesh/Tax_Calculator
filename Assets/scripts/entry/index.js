@@ -1,11 +1,17 @@
-import { elements } from '../../elements/index.js';
-import Database from '../../database/index.js';
+import { elements } from '../elements/index.js';
+import Database from '../database/index.js';
 const {
     INPUT_ADD, INPUT_CANCEL,
     INPUT_QUANTITY, INPUT_UNIT_PRICE,
     INPUT_RANGE,
     INPUT_TABLE, INPUT_TABLE_ELEMENMTS,
-    CALCULATE_BILL_RESET, INPUT_TABLE_DELETE
+    CALCULATE_BILL_RESET, INPUT_TABLE_DELETE,
+    CALCULATE_BILL,
+    BILL_TOTAL,
+    BILL_TAXABLE_AMOUNT, BILL_VAT_PERCENTAGE,
+    BILL_GRAND_TOTAL,
+    BILL_CALCULATOR_CANCEL, CALCULATION_BLOCK,
+    BILL_VAT_AMOUNT
 } = elements;
 
 
@@ -29,6 +35,8 @@ export default class InputManager extends Database {
         this.clear_trigger;
         this.add_to_array;
         this.reset_tabel;
+        this.calculate_total;
+        this.clear_calculation_trigger;
         if (inputs.length != 0) this.show_table(true);
     }
 
@@ -40,16 +48,17 @@ export default class InputManager extends Database {
             // Check if range true than add random %, tax % and calculate total else tax % and multiplication
 
             // Get Added amount with add percentage
-            let profit_info = INPUT_RANGE.checked ? this.add_range_profit(INPUT_UNIT_PRICE.value) : null;
+            let add_profit = INPUT_RANGE.checked ? this.add_range_profit(INPUT_UNIT_PRICE.value) : null;
 
             // Add profit percentage if range checked elese normal input
-            let units_with_profit = INPUT_RANGE.checked ? profit_info.amount : INPUT_UNIT_PRICE.value;
+            let unit_price_with_profit = INPUT_RANGE.checked ? add_profit.amount : INPUT_UNIT_PRICE.value;
 
             let reduced_percent = parseFloat(`1.${this.tax}`);
             let reduced_price = parseFloat((parseFloat(INPUT_UNIT_PRICE.value) / reduced_percent).toFixed(2));
 
             // Add Tax% and calculate total if Range Checked else reduce tax
-            let units_with_tax = INPUT_RANGE.checked ? this.add_tax(units_with_profit).amount : reduced_price;
+            let taxed = this.add_tax(unit_price_with_profit);
+            let units_with_tax = INPUT_RANGE.checked ? (taxed.amount / reduced_percent) : reduced_price;
 
             let CALCULATED_PRICE = parseFloat(units_with_tax.toFixed(2));
             let QUANTITY = parseFloat(INPUT_QUANTITY.value);
@@ -60,8 +69,8 @@ export default class InputManager extends Database {
                 QUANTITY,
                 INPUT_PRICE: parseFloat(INPUT_UNIT_PRICE.value),
                 CALCULATED_PRICE,
-                PROFIT_PERCENTAGE: INPUT_RANGE.checked ? profit_info.percentage : 0,
-                TAX_PERCENTAGE: units_with_tax.percentage,
+                PROFIT_PERCENTAGE: INPUT_RANGE.checked ? add_profit.percentage : 0,
+                TAX_PERCENTAGE: INPUT_RANGE.checked ? taxed.percentage : 0,
                 TOTAL_AMOUNT: this.calculate_units_total(QUANTITY, CALCULATED_PRICE),
                 RANGE: INPUT_RANGE.checked ? "Yes" : "NO"
             })
@@ -103,13 +112,19 @@ export default class InputManager extends Database {
     }
 
     /**
-     * Resets the tabel and inputs array as well
+     * Resets Table
      */
-    reset_tabel = CALCULATE_BILL_RESET.addEventListener('click', () => {
+    reset_tabelFn = () => {
         INPUT_TABLE_ELEMENMTS.innerHTML = "";
-        inputs = [];
+        this.reset_inputs_value();
         this.populate_table();
-    });
+    }
+
+    /**
+     * Resets input
+     */
+    reset_inputs_value = () => inputs = [];
+
 
     /**
      * Show Hide Table
@@ -185,7 +200,7 @@ export default class InputManager extends Database {
      * Get the Random Number between maximum and minimum profit range
      */
     random_range = () =>
-        (Math.random() * (this.max - this.min) + this.min).toFixed(2);
+        (Math.random() * (this.max - this.min) + this.min).toFixed(0);
 
     /**
      * Returns all the inputs array
@@ -205,4 +220,53 @@ export default class InputManager extends Database {
         INPUT_UNIT_PRICE.value = "";
         INPUT_RANGE.checked = false;
     }
+
+    /**
+    * Calculate Total
+    */
+    calculate_total = CALCULATE_BILL.addEventListener('click', (e) => {
+        let sum_bill = 0;
+        this.clear_total_section();
+        inputs.forEach(el => {
+            sum_bill += el.TOTAL_AMOUNT;
+        });
+        let bill_total = parseFloat((this.add_tax(sum_bill).amount).toFixed(2));
+        BILL_TOTAL.value = sum_bill;
+        BILL_TAXABLE_AMOUNT.value = sum_bill;;
+        BILL_VAT_AMOUNT.value = parseFloat((bill_total - sum_bill).toFixed(2));
+        BILL_GRAND_TOTAL.value = bill_total;
+        CALCULATION_BLOCK.classList.replace('d-none', 'd-block');
+    });
+
+     /**
+     * Clears up section
+     */
+    clear_total_section = () => {
+        BILL_TOTAL.value = "";
+        BILL_TAXABLE_AMOUNT.value = "";
+        BILL_VAT_AMOUNT.value = "";
+        BILL_VAT_PERCENTAGE.value = `${this.getItem('TAX_PERCENT')}%`;
+        BILL_GRAND_TOTAL.value = "";
+    }
+
+    /**
+     * Clear Up All Things
+     */
+    clear_all=()=>{
+        this.reset_tabelFn();
+        this.show_table();
+        this.clear_total_section();
+        CALCULATION_BLOCK.classList.replace('d-block', 'd-none');
+    }
+
+    
+    /**
+     * Trigger Clear
+     */
+    clear_calculation_trigger = BILL_CALCULATOR_CANCEL.addEventListener('click',this.clear_all);
+
+    /**
+     * Resets the tabel and inputs array as well
+     */
+    reset_tabel = CALCULATE_BILL_RESET.addEventListener('click', this.clear_all);
 }
