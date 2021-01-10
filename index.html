@@ -69,30 +69,20 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12 pr-2 pl-2">
-                                <label for="STORAGE_RANEG"><b>Profit ranger in %</b></label>
-                            </div>
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-6 p-2">
-                                        <label for="STORAGE_PROFIT_MINIMUM">Minimum %</label>
-                                        <input type="number" name="STORAGE_PROFIT_MINIMUM" id="STORAGE_PROFIT_MINIMUM"
-                                            class="form-control" placeholder="10" value="10" min="0" max="100">
+                                        <label for="STORAGE_PROFIT_PERCENTAGE"><b>Profit %</b></label>
+                                        <input type="number" name="STORAGE_PROFIT_PERCENTAGE"
+                                            id="STORAGE_PROFIT_PERCENTAGE" class="form-control"
+                                            value="20" min="0" max="100">
                                     </div>
                                     <div class="col-md-6 p-2">
-                                        <label for="STORAGE_PROFIT_MAXIMUM">Maximum %</label>
-                                        <input type="number" name="STORAGE_PROFIT_MAXIMUM" id="STORAGE_PROFIT_MAXIMUM"
-                                            class="form-control" placeholder="20" value="20" min="0" max="100">
+                                        <label for="STORAGE_TAX_PERCENT"><b>Tax %</b></label>
+                                        <input type="number" name="STORAGE_TAX_PERCENT" id="STORAGE_TAX_PERCENT"
+                                            class="form-control" placeholder="13" value="13" min="0" max="100">
                                     </div>
                                 </div>
-                                <hr>
-                            </div>
-                            <div class="col-md-12">
-                                <label for="STORAGE_TAX_PERCENT"><b>Tax %</b></label>
-                            </div>
-                            <div class="col-md-12">
-                                <input type="number" name="STORAGE_TAX_PERCENT" id="STORAGE_TAX_PERCENT"
-                                    class="form-control" placeholder="13" value="13" min="0" max="100">
                             </div>
                             <div class="col-md-12 m-2 text-center">
                                 <button type="button" id="STORAGE_CALCULATOR_SETTINGS_SAVE"

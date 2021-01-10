@@ -11,7 +11,7 @@ const {
     BILL_TAXABLE_AMOUNT, BILL_VAT_PERCENTAGE,
     BILL_GRAND_TOTAL,
     BILL_CALCULATOR_CANCEL, CALCULATION_BLOCK,
-    BILL_VAT_AMOUNT
+    BILL_VAT_AMOUNT,
 } = elements;
 
 
@@ -22,9 +22,8 @@ let
 export default class InputManager extends Database {
     constructor() {
         super(Database);
-        this.min = parseFloat(this.getItem('MINIMUM_PROFIT'));
-        this.max = parseFloat(this.getItem('MAXIMUM_PROFIT'));
-        this.tax = parseFloat(this.getItem('TAX_PERCENT'));
+        this.profit = parseFloat(this.getItem('STORAGE_PROFIT_PERCENTAGE'));
+        this.tax = parseFloat(this.getItem('STORAGE_TAX_PERCENT'));
         this.initialize();
     }
 
@@ -44,6 +43,8 @@ export default class InputManager extends Database {
      * Adds the input value to inputs array
      */
     add_to_array = INPUT_ADD.addEventListener('click', () => {
+        this.profit = parseFloat(this.getItem('STORAGE_PROFIT_PERCENTAGE'));
+        this.tax = parseFloat(this.getItem('STORAGE_TAX_PERCENT'));
         if (INPUT_QUANTITY.value.length != 0 && INPUT_UNIT_PRICE.value.length) {
             // Check if range true than add random %, tax % and calculate total else tax % and multiplication
 
@@ -194,13 +195,8 @@ export default class InputManager extends Database {
      * Calculate Profit amount from random range
      * @param {number} units 
      */
-    add_range_profit = (units) => this.addition_facetory(parseFloat(units))(parseFloat((this.random_range())));
+    add_range_profit = (units) => this.addition_facetory(parseFloat(units))(parseFloat((this.profit)));
 
-    /**
-     * Get the Random Number between maximum and minimum profit range
-     */
-    random_range = () =>
-        (Math.random() * (this.max - this.min) + this.min).toFixed(0);
 
     /**
      * Returns all the inputs array
@@ -238,32 +234,32 @@ export default class InputManager extends Database {
         CALCULATION_BLOCK.classList.replace('d-none', 'd-block');
     });
 
-     /**
-     * Clears up section
-     */
+    /**
+    * Clears up section
+    */
     clear_total_section = () => {
         BILL_TOTAL.value = "";
         BILL_TAXABLE_AMOUNT.value = "";
         BILL_VAT_AMOUNT.value = "";
-        BILL_VAT_PERCENTAGE.value = `${this.getItem('TAX_PERCENT')}%`;
+        BILL_VAT_PERCENTAGE.value = `${this.getItem('STORAGE_TAX_PERCENT')}%`;
         BILL_GRAND_TOTAL.value = "";
     }
 
     /**
      * Clear Up All Things
      */
-    clear_all=()=>{
+    clear_all = () => {
         this.reset_tabelFn();
         this.show_table();
         this.clear_total_section();
         CALCULATION_BLOCK.classList.replace('d-block', 'd-none');
     }
 
-    
+
     /**
      * Trigger Clear
      */
-    clear_calculation_trigger = BILL_CALCULATOR_CANCEL.addEventListener('click',this.clear_all);
+    clear_calculation_trigger = BILL_CALCULATOR_CANCEL.addEventListener('click', this.clear_all);
 
     /**
      * Resets the tabel and inputs array as well

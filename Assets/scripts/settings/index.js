@@ -5,8 +5,7 @@ const {
     CALCULATOR_SETTINGS_TRIGGER,
     CALCULATOR_SETTINGS,
 
-    STORAGE_PROFIT_MINIMUM,
-    STORAGE_PROFIT_MAXIMUM,
+    STORAGE_PROFIT_PERCENTAGE,
     STORAGE_TAX_PERCENT,
 
 } = elements;
@@ -27,8 +26,18 @@ export default class Calculator_Storage extends Database {
         if (this.database.length === 0)
             this.store_settings();
         this.trigger_store_settings;
+        this.set_dom_value();
     }
 
+    /**
+     * Shows and Hides the settings block 
+     */
+    showHide_Settings = () => {
+        if (settings_show_click_count % 2 == 0) CALCULATOR_SETTINGS.classList.replace('d-none', 'd-block');
+        else CALCULATOR_SETTINGS.classList.replace('d-block', 'd-none');
+        settings_show_click_count++;
+    }
+    
     /**
      * Trigger when calculator settings 
      */
@@ -41,9 +50,18 @@ export default class Calculator_Storage extends Database {
      * Store Settings 
      */
     store_settings = () => {
-        this.setItem('MINIMUM_PROFIT', STORAGE_PROFIT_MINIMUM.value)
-        this.setItem('MAXIMUM_PROFIT', STORAGE_PROFIT_MAXIMUM.value)
-        this.setItem('TAX_PERCENT', STORAGE_TAX_PERCENT.value)
+        this.setItem('STORAGE_PROFIT_PERCENTAGE', STORAGE_PROFIT_PERCENTAGE.value);
+        this.setItem('STORAGE_TAX_PERCENT', STORAGE_TAX_PERCENT.value)
+    }
+
+    /**
+     * Sets The Dom Value
+     */
+    set_dom_value=()=>{
+        if(this.database.length!=0){
+            STORAGE_PROFIT_PERCENTAGE.value=this.getItem('STORAGE_PROFIT_PERCENTAGE');
+            STORAGE_TAX_PERCENT.value=this.getItem('STORAGE_TAX_PERCENT');
+        }
     }
 
     /**
@@ -54,12 +72,5 @@ export default class Calculator_Storage extends Database {
         STORAGE_CALCULATOR_SETTINGS_CANCEL.addEventListener('click', this.showHide_Settings);
     }
 
-    /**
-     * Shows and Hides the settings block 
-     */
-    showHide_Settings = () => {
-        if (settings_show_click_count % 2 == 0) CALCULATOR_SETTINGS.classList.replace('d-none', 'd-block');
-        else CALCULATOR_SETTINGS.classList.replace('d-block', 'd-none');
-        settings_show_click_count++;
-    }
+
 }
